@@ -1,24 +1,17 @@
-from escpos.printer import Usb
 from telegram.ext import Updater
 import logging
 from print_bot import PrintBot
-
+import os
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                          level=logging.INFO)
-    updater = Updater(token='')
+    if "BOT_TOKEN" not in os.environ:
+        logging.error("BOT_TOKEN not set")
+        exit(-1)
 
-    # printer = Usb(0x0416, 0x5011, 0, 0x81, 0x03)
-    # printer.set(font="a", double_width=True, double_height=True, align="center", bold=True)
-    # printer.text("     TODO     \n")
-    # printer.set(font="a", align="center", bold=True)
-    # printer.text("---------------\n")
-    # printer.text("\n")
-    # printer.text("\n")
-    # exit()
+    token = os.environ["BOT_TOKEN"]
+    updater = Updater(token=token)
     bot = PrintBot(updater.dispatcher)
-
-
     updater.start_polling()
     updater.idle()
